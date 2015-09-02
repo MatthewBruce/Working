@@ -11,7 +11,9 @@ ggplot(sheet2,aes(x=factor(group),y=relative))+geom_bar(stat='identity',width=0.
 
 
 rel = c(1.0792,0.8526,0.9526,0.0208,0.0221,0.0186)
-group = factor(rep(c('control','rapamycin'),3))
+group = factor(rep(c('control','rapamycin'),each=3))
 dt = data.frame(rel,group)
 t.test(rel~group,data=dt)
 wilcox.test(rel~group,data=dt)
+
+
