@@ -21,7 +21,7 @@ sheet1_2 = sheet1_2[,-c(2,3)]
 
 dt = melt(sheet1_1,id=c('Fatty_Acid','control_sd','Treatment_sd'))
 dt = melt(dt,id=c('Fatty_Acid','variable','value'))[-c(13:36),-4]
-names(dt)[2:4] = c('trial','mean','sd')
+names(dt)[2:4] = c('Group','mean','sd')
 
 dt$mean = as.numeric(dt$mean)
 dt$sd = as.numeric(dt$sd)
@@ -30,8 +30,13 @@ dt = arrange(dt,Fatty_Acid)
 
 dt$Fatty_Acid=reorder(dt$Fatty_Acid,dt$mean)
 
-p=ggplot(dt,aes(x=Fatty_Acid,y=mean,fill=trial))+geom_bar(position = 'dodge',colour='black',stat="identity")+theme_light()+theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank(),axis.title.y=element_text(size=10),panel.border=element_blank(),axis.line=element_line(colour='grey',size=0.5))+ylab('Concentration(mg/kg)')+scale_fill_brewer(palette="Pastel1")+guides(fill=guide_legend(reverse=TRUE)) +xlab('Fatty Acid')
+p=ggplot(dt,aes(x=Fatty_Acid,y=mean,fill=Group))+geom_bar(position = 'dodge',colour='black',stat="identity")
 
-p+coord_flip()
+q=p+theme_light()+theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank(),axis.title.y=element_text(size=10),panel.border=element_blank(),axis.line=element_line(colour='grey',size=0.5))+ylab('Concentration(mg/kg)')+guides(fill=guide_legend(reverse=TRUE,title=NULL)) +xlab('Fatty Acid')+scale_fill_discrete(labels=c("Control", "Treatment"))++scale_fill_discrete(labels=c("Control", "Treatment"))
+
+r=q+geom_errorbar(aes(ymin=mean-sd,ymax=mean+sd),position=position_dodge(.9),width=0.2,color='black',size=0.35)
+
+r+coord_flip()
+
 
 
